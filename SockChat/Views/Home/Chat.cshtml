@@ -1,0 +1,65 @@
+﻿@using Microsoft.AspNet.Identity
+@model List<SockChat.Models.MessageData>
+
+@{
+    ViewBag.Title = "Chat";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Chat</h2>
+
+@if (Request.IsAuthenticated)
+{
+    <div class="jumbotron">
+        <ul id="discussion">
+    @foreach(var message in Model)
+    {
+        <li>
+            <strong>@message.User.Email</strong>@message.MessageText
+        </li>
+    }
+    </ul>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="input-group">
+                <span class="input-group-addon"><span id="username">Placeholder</span></span>
+                <input type="text" id="message" class="form-control" placeholder="type message here" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" id="sendmessage">Send</button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="displayname" />
+
+    <script type="text/javascript">
+        $(function () {
+            // Declare a proxy to reference the hub.
+            var chat = $.connection.chatHub;
+            // Create a function that the hub can call to broadcast messages.
+            chat.client.broadcastMessage = function (name, message) {
+                // Html encode display name and message.
+                var encodedName = $('<div />').text(name).html();
+                var encodedMsg = $('<div />').text(message).html();
+                // Add the message to the page.
+                $('#discussion').append('<li><strong>' + encodedName
+                    + '</strong>:&nbsp;&nbsp;' + encodedMsg + '</li>');
+            };
+            // Get the user name and store it to prepend to messages.
+            $('#displayname').val('@User.Identity.GetUserName()');
+            $('#username').text($('#displayname')[0].value);
+            // Set initial focus to message input box.
+            $('#message').focus();
+            // Start the connection.
+            $.connection.hub.start().done(function () {
+                $('#sendmessage').click(function () {
+                    // Call the Send method on the hub.
+                    chat.server.send($('#displayname').val(), $('#message').val());
+                    // Clear text box and reset focus for next comment.
+                    $('#message').val('').focus();
+                });
+            });
+        });
+    </script>
+}
