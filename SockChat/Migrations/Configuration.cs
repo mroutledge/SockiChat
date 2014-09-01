@@ -5,6 +5,7 @@ namespace SockChat.Migrations
     using SockChat.Models;
     using System.Data.Entity.Migrations;
     using System;
+    using System.Linq;
 
     internal sealed class Configuration : DbMigrationsConfiguration<SockChat.Models.ApplicationDbContext>
     {
@@ -54,29 +55,31 @@ namespace SockChat.Migrations
 
             var appUser = new ApplicationUser
             {
-                UserName = "morgan.routledge@gmail.com",
+                UserName = "Morgan",
                 Email = "morgan.routledge@gmail.com"
             };
-            IdUserResult = userMgr.Create(appUser, "Test01!");
+            IdUserResult = userMgr.Create(appUser, "");
 
-            if (!userMgr.IsInRole(userMgr.FindByEmail("morgan.routledge@gmail.com").Id, "canEdit"))
+            string adminId = userMgr.FindByEmail("morgan.routledge@gmail.com").Id;
+
+            if (!userMgr.IsInRole(adminId, "canEdit"))
             {
                 //IdUserResult = userMgr.AddToRole(appUser.Id, "canEdit");
-                IdUserResult = userMgr.AddToRole(userMgr.FindByEmail("morgan.routledge@gmail.com").Id, "canEdit");
+                IdUserResult = userMgr.AddToRole(adminId, "canEdit");
             }
 
-            if (!userMgr.IsInRole(userMgr.FindByEmail("morgan.routledge@gmail.com").Id, "admin"))
+            if (!userMgr.IsInRole(adminId, "admin"))
             {
                 //  IdUserResult = userMgr.AddToRole(appUser.Id, "canEdit");
-                IdUserResult = userMgr.AddToRole(userMgr.FindByEmail("morgan.routledge@gmail.com").Id, "admin");
+                IdUserResult = userMgr.AddToRole(adminId, "admin");
             }
 
-            Channel main = new Channel { Creator = userMgr.FindByEmail("morgan.routledge@gmail.com"), Topic = "Main" };
-            context.Channels.AddOrUpdate(p => p.Topic, main);
-
+            context.Channels.AddOrUpdate(p => p.Topic, new Channel { Creator = context.Users.Find(adminId), Topic = "Main", AddedOn = DateTime.Now });
+            
+            context.SaveChanges();
             context.Messages.AddOrUpdate(
                 P => P.MessageText,
-                new MessageData() { BackgroundColour = "Black", TargetChannel = main, Colour = "Black", Created = DateTime.Now, MessageText = "Test", User = userMgr.FindByEmail("morgan.routledge@gmail.com") }
+                new MessageData() { BackgroundColour = "Black", TargetChannel = context.Channels.FirstOrDefault(p => p.Topic == "Main"), Colour = "Black", Created = DateTime.Now, MessageText = "Test", User = context.Users.Find(adminId) }
                 );
         }
     }

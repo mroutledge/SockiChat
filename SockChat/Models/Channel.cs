@@ -11,7 +11,7 @@ namespace SockChat.Models
         [ScaffoldColumn(false)]
         [Key]
         public int ChannelId { get; set; }
-        public ApplicationUser Creator { get; set; }
+        public virtual ApplicationUser Creator { get; set; }
         public DateTime AddedOn { get; set; }
         public string Topic { get; set; }
     }

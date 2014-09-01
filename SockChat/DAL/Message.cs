@@ -18,10 +18,31 @@ namespace SockChat.DAL
 
             using (var context = new ApplicationDbContext())
             {
-                messages = context.Messages.ToList();
+                messages = context.Messages.Include( p => p.User).ToList();
             }
 
             return messages;
+        }
+
+        public static void Save(string name, string text, string channel)
+        {
+            MessageData md = new MessageData { MessageText = text};
+
+            using (var context = new ApplicationDbContext())
+            {
+                try
+                {
+                    md.TargetChannel = context.Channels.FirstOrDefault(p => p.Topic == "Main");
+                    md.User = context.Users.FirstOrDefault(p => p.Email == name);
+                    context.Messages.Add(md);
+                    context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    
+                    throw;
+                }
+            }
         }
     }
 }

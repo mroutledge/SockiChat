@@ -18,5 +18,14 @@ namespace SockChat.Models
         public DateTime Created { get; set; }
         public Channel TargetChannel { get; set; }
         public string TargetUserId { get; set; }
+
+        public MessageData() 
+        {
+            Font = "Arial";
+            Colour = "Black";
+            BackgroundColour = "Black";
+            FontSize = 12;
+            Created = DateTime.Now;
+        }
     }
 }

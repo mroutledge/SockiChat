@@ -31,6 +31,7 @@ namespace SockChat.Controllers
 
         public ActionResult Chat() 
         {
+            ViewBag.ChatName = "Main";
             return View(Message.Get());
         }
     }

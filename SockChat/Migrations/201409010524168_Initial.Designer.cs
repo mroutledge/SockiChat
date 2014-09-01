@@ -13,7 +13,7 @@ namespace SockChat.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201408270310439_Initial"; }
+            get { return "201409010524168_Initial"; }
         }
         
         string IMigrationMetadata.Source

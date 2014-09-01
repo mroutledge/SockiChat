@@ -15,7 +15,7 @@
     @foreach(var message in Model)
     {
         <li>
-            <strong>@message.User.Email</strong>@message.MessageText
+            <strong>@message.User.Email</strong><span>:  </span>@message.MessageText
         </li>
     }
     </ul>
@@ -55,7 +55,7 @@
             $.connection.hub.start().done(function () {
                 $('#sendmessage').click(function () {
                     // Call the Send method on the hub.
-                    chat.server.send($('#displayname').val(), $('#message').val());
+                    chat.server.send($('#displayname').val(), $('#message').val(), '@ViewBag.ChatName');
                     // Clear text box and reset focus for next comment.
                     $('#message').val('').focus();
                 });
