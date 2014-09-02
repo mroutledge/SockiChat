@@ -60,8 +60,8 @@ namespace SockChat
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
-                ClientId = "185439264313-rfadiq3tr8aq59l5fva4v38f3p13nodq.apps.googleusercontent.com",
-                ClientSecret = "w8u4SXLgSk0dOdmEOOSP92O2"
+                ClientId = "",
+                ClientSecret = ""
             });
         }
     }

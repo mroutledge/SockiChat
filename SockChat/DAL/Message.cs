@@ -1,9 +1,8 @@
-﻿using System;
+﻿using SockChat.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using SockChat.Models;
 using System.Data.Entity;
+using System.Linq;
 
 namespace SockChat.DAL
 {
@@ -18,7 +17,7 @@ namespace SockChat.DAL
 
             using (var context = new ApplicationDbContext())
             {
-                messages = context.Messages.Include( p => p.User).ToList();
+                messages = context.Messages.Include(p => p.User).OrderBy( p => p.Created).Take(50).ToList();
             }
 
             return messages;
@@ -39,7 +38,6 @@ namespace SockChat.DAL
                 }
                 catch (Exception)
                 {
-                    
                     throw;
                 }
             }

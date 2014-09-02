@@ -20,12 +20,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
                     @if (Request.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Chat", "Chat", "Home")</li>
                     }
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
@@ -41,7 +40,6 @@
             <p>&copy; @DateTime.Now.Year - Morgan Routledge</p>
         </footer>
     </div>
-    
     @Scripts.Render("~/bundles/bootstrap")
     <script src="~/signalr/hubs"></script>
     @RenderSection("scripts", required: false)
