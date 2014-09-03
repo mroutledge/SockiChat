@@ -11,28 +11,27 @@
 @if (Request.IsAuthenticated)
 {
     <div class="jumbotron">
-        <ul id="discussion">
-    @foreach(var message in Model)
-    {
-        <li>
-            <strong>@message.User.Email</strong><span>:  </span>@message.MessageText
-        </li>
-    }
-    </ul>
-    </div>
-    <div class="row">
-        <div class="col-lg-4">
-            <div class="input-group">
-                <span class="input-group-addon"><span id="username">Placeholder</span></span>
-                <input type="text" id="message" class="form-control" placeholder="type message here" />
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" id="sendmessage">Send</button>
-                </span>
-            </div>
+        <div id="discussion">
+            @foreach (var message in Model)
+            {
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object" src="..." alt="...">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">@message.User.Email</h4>
+                        @message.MessageText
+                    </div>
+                </div>
+            }
         </div>
     </div>
+    <div class="input-group">
+        <span class="input-group-addon"><span id="username">Placeholder</span></span>
+        <input type="text" id="message" class="form-control" placeholder="type message here" />
+        <button class="btn btn-default" type="button" id="sendmessage">Send</button>
+    </div>
     <input type="hidden" id="displayname" />
-
     <script type="text/javascript">
         $(function () {
             // Declare a proxy to reference the hub.
@@ -43,8 +42,9 @@
                 var encodedName = $('<div />').text(name).html();
                 var encodedMsg = $('<div />').text(message).html();
                 // Add the message to the page.
-                $('#discussion').append('<li><strong>' + encodedName
-                    + '</strong>:&nbsp;&nbsp;' + encodedMsg + '</li>');
+                $('#discussion').append('<div class="media"><a class="pull-left" href="#"><img class="media-object" src="..." alt="..."></a><div class="media-body"><h4 class="media-heading">' + encodedName
+                    + '</h4>' + encodedMsg + '</div></div>');
+                newExcitingAlerts('New!');
             };
             // Get the user name and store it to prepend to messages.
             $('#displayname').val('@User.Identity.GetUserName()');
@@ -60,6 +60,26 @@
                     $('#message').val('').focus();
                 });
             });
+
+
         });
+        //flash tab
+        newExcitingAlerts = (function (msg) {
+            var oldTitle = document.title;
+            var timeoutId;
+            var blink = function () { document.title = document.title == msg ? ' ' : msg; };
+            var clear = function () {
+                clearInterval(timeoutId);
+                document.title = oldTitle;
+                window.onmousemove = null;
+                timeoutId = null;
+            };
+            return function () {
+                if (!timeoutId) {
+                    timeoutId = setInterval(blink, 1000);
+                    window.onmousemove = clear;
+                }
+            };
+        }());
     </script>
 }

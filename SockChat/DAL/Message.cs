@@ -17,10 +17,10 @@ namespace SockChat.DAL
 
             using (var context = new ApplicationDbContext())
             {
-                messages = context.Messages.Include(p => p.User).OrderBy( p => p.Created).Take(50).ToList();
+                messages = context.Messages.Include(p => p.User).OrderByDescending( p => p.MessageId).Take(15).ToList();
             }
 
-            return messages;
+            return messages.OrderBy(p => p.MessageId).ToList();
         }
 
         public static void Save(string name, string text, string channel)

@@ -75,12 +75,12 @@ namespace SockChat.Migrations
             }
 
             context.Channels.AddOrUpdate(p => p.Topic, new Channel { Creator = context.Users.Find(adminId), Topic = "Main", AddedOn = DateTime.Now });
-            
-            context.SaveChanges();
-            context.Messages.AddOrUpdate(
-                P => P.MessageText,
-                new MessageData() { BackgroundColour = "Black", TargetChannel = context.Channels.FirstOrDefault(p => p.Topic == "Main"), Colour = "Black", Created = DateTime.Now, MessageText = "Test", User = context.Users.Find(adminId) }
-                );
+
+            //context.SaveChanges();
+            //context.Messages.AddOrUpdate(
+            //    P => P.MessageText,
+            //    new MessageData() { BackgroundColour = "Black", TargetChannel = context.Channels.FirstOrDefault(p => p.Topic == "Main"), Colour = "Black", Created = DateTime.Now, MessageText = "Test", User = context.Users.Find(adminId) }
+            //    );
         }
     }
 }
