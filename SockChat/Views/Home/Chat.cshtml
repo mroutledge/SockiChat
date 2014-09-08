@@ -16,7 +16,7 @@
             {
                 <div class="media">
                     <a class="pull-left" href="#">
-                        <img class="media-object" src="..." alt="...">
+                        <img class="media-object" src="..." alt="@message.Created">
                     </a>
                     <div class="media-body">
                         <h4 class="media-heading">@message.User.Email</h4>
@@ -42,9 +42,11 @@
                 var encodedName = $('<div />').text(name).html();
                 var encodedMsg = $('<div />').text(message).html();
                 // Add the message to the page.
-                $('#discussion').append('<div class="media"><a class="pull-left" href="#"><img class="media-object" src="..." alt="..."></a><div class="media-body"><h4 class="media-heading">' + encodedName
+                $('#discussion').append('<div class="media"><a class="pull-left" href="#"><img class="media-object" src="..." alt="'
+                    + Date() + '"></a><div class="media-body"><h4 class="media-heading">'
+                    + encodedName
                     + '</h4>' + encodedMsg + '</div></div>');
-                newExcitingAlerts('New!');
+                newExcitingAlerts();
             };
             // Get the user name and store it to prepend to messages.
             $('#displayname').val('@User.Identity.GetUserName()');
@@ -63,23 +65,24 @@
 
 
         });
-        //flash tab
-        newExcitingAlerts = (function (msg) {
-            var oldTitle = document.title;
-            var timeoutId;
-            var blink = function () { document.title = document.title == msg ? ' ' : msg; };
-            var clear = function () {
-                clearInterval(timeoutId);
-                document.title = oldTitle;
-                window.onmousemove = null;
-                timeoutId = null;
-            };
-            return function () {
-                if (!timeoutId) {
-                    timeoutId = setInterval(blink, 1000);
-                    window.onmousemove = clear;
-                }
-            };
-        }());
+                    //flash tab
+            newExcitingAlerts = (function () {
+                var oldTitle = document.title;
+                var msg = "New!";
+                var timeoutId;
+                var blink = function () { document.title = document.title == msg ? ' ' : msg; };
+                var clear = function () {
+                    clearInterval(timeoutId);
+                    document.title = oldTitle;
+                    window.onmousemove = null;
+                    timeoutId = null;
+                };
+                return function () {
+                    if (!timeoutId) {
+                        timeoutId = setInterval(blink, 1000);
+                        window.onmousemove = clear;
+                    }
+                };
+            }());
     </script>
 }
